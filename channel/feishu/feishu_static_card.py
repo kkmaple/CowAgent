@@ -213,6 +213,7 @@ def download_public_image(
 def upload_public_image_to_feishu(
     url: str,
     access_token: str,
+    api_base: str = "https://open.feishu.cn",
     post=requests.post,
 ) -> Optional[str]:
     """Download a public image and upload its bytes to Feishu."""
@@ -224,8 +225,9 @@ def upload_public_image_to_feishu(
         "image/webp": "webp",
         "image/bmp": "bmp",
     }.get(content_type, "img")
+    base = (api_base or "https://open.feishu.cn").rstrip("/")
     response = post(
-        "https://open.feishu.cn/open-apis/im/v1/images",
+        f"{base}/open-apis/im/v1/images",
         headers={"Authorization": "Bearer " + access_token},
         data={"image_type": "message"},
         files={

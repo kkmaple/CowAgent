@@ -21,7 +21,7 @@ class TokenResponse:
         return f"<Response [{self.status_code}]>"
 
 
-def _channel():
+def _channel(domain="https://open.feishu.cn"):
     # fetch_access_token only reads the two credentials, and the class is wrapped
     # by @singleton, so build a bare instance from the undecorated class instead
     # of starting a channel.
@@ -29,6 +29,7 @@ def _channel():
     channel = cls.__new__(cls)
     channel.feishu_app_id = "cli_test_app_id"
     channel.feishu_app_secret = "test_app_secret"
+    channel.feishu_domain = domain
     return channel
 
 
@@ -77,6 +78,16 @@ def test_token_request_is_bounded():
     # Every other requests.* call in this module is bounded; an unbounded token
     # request is the one that can hang a push worker forever.
     assert post.calls[0]["timeout"] == (5, 10)
+
+
+def test_token_request_uses_configured_domain():
+    post = _post(TokenResponse(200, {"code": 0, "tenant_access_token": "t-abc123"}))
+
+    with patch("channel.feishu.feishu_channel.requests.post", side_effect=post):
+        token = _channel("https://open.larksuite.com").fetch_access_token()
+
+    assert token == "t-abc123"
+    assert post.calls[0]["url"] == "https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal/"
 
 
 def test_send_does_not_build_a_bearer_header_without_a_token():

@@ -202,6 +202,7 @@ available_setting = {
     "feishu_app_id": "",  # Feishu bot app id
     "feishu_app_secret": "",  # Feishu bot app secret
     "feishu_token": "",  # Feishu verification token; only needed in webhook mode
+    "feishu_domain": "https://open.feishu.cn",  # Feishu/Lark websocket domain override; use https://open.larksuite.com for Lark international apps
     "feishu_event_mode": "websocket",  # Feishu event mode: webhook(HTTP server) or websocket(long connection)
     # Feishu streaming reply (based on the official cardkit streaming-card API; requires the cardkit:card:write permission and Feishu client 7.20+)
     "feishu_stream_reply": True,  # whether to enable streaming reply (typewriter effect); auto-downgrades to non-streaming or shows an upgrade prompt on failure/old clients

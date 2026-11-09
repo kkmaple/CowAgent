@@ -80,6 +80,7 @@ CREDENTIAL_KEYS: Dict[str, tuple] = {
     const.FEISHU: (
         "feishu_app_id",
         "feishu_app_secret",
+        "feishu_domain",
         "feishu_token",
         "feishu_bot_name",
     ),

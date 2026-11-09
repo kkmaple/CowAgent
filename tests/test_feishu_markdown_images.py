@@ -144,11 +144,37 @@ def test_public_image_is_uploaded_to_feishu_without_a_temp_file(monkeypatch):
     )
 
     assert image_key == "img_v2_uploaded"
+    assert calls[0][0] == "https://open.feishu.cn/open-apis/im/v1/images"
     assert calls[0][1]["headers"] == {"Authorization": "Bearer tenant-token"}
     filename, payload, content_type = calls[0][1]["files"]["image"]
     assert filename == "markdown-image.png"
     assert payload == b"png-bytes"
     assert content_type == "image/png"
+
+
+def test_public_image_upload_uses_configured_api_domain(monkeypatch):
+    monkeypatch.setattr(
+        feishu_static_card,
+        "download_public_image",
+        lambda _url: (b"png-bytes", "image/png"),
+    )
+    response = FakeResponse()
+    response.json_body = {"code": 0, "data": {"image_key": "img_v2_uploaded"}}
+    calls = []
+
+    def post(url, **kwargs):
+        calls.append(url)
+        return response
+
+    image_key = feishu_static_card.upload_public_image_to_feishu(
+        "https://example.com/image.png",
+        "tenant-token",
+        api_base="https://open.larksuite.com",
+        post=post,
+    )
+
+    assert image_key == "img_v2_uploaded"
+    assert calls == ["https://open.larksuite.com/open-apis/im/v1/images"]
 
 
 @pytest.mark.parametrize(

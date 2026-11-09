@@ -43,6 +43,7 @@ class ChannelsHandler:
             "fields": [
                 {"key": "feishu_app_id", "label": "App ID", "type": "text"},
                 {"key": "feishu_app_secret", "label": "App Secret", "type": "secret"},
+                {"key": "feishu_domain", "label": "API Domain", "type": "text"},
             ],
         }),
         ("dingtalk", {

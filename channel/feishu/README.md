@@ -22,6 +22,7 @@
   "feishu_app_secret": "your_app_secret",
   "feishu_token": "your_verification_token",
   "feishu_bot_name": "你的机器人名称",
+  "feishu_domain": "https://open.feishu.cn",
   "feishu_event_mode": "webhook",
   "feishu_port": 9891
 }
@@ -33,6 +34,7 @@
 - `feishu_app_secret`: 飞书应用的App Secret
 - `feishu_token`: 事件订阅的Verification Token
 - `feishu_bot_name`: 机器人名称(用于群聊@判断)
+- `feishu_domain`: websocket连接的域名，默认 `https://open.feishu.cn`。如果你使用的是 Lark 国际版应用，请改成 `https://open.larksuite.com`。
 - `feishu_event_mode`: 事件接收模式，可选值:
   - `"websocket"`: 长连接模式(默认)
   - `"webhook"`: HTTP服务器模式
@@ -84,7 +86,8 @@ pip install lark-oapi
 
 ```json
 {
-  "feishu_event_mode": "websocket"
+  "feishu_event_mode": "websocket",
+  "feishu_domain": "https://open.feishu.cn"
 }
 ```
 

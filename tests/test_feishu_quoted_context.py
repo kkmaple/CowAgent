@@ -103,3 +103,22 @@ def test_message_without_parent_does_not_fetch(monkeypatch):
 
     assert message.quoted_content == ""
     assert message.content_with_quote() == "What does this mean?"
+
+
+def test_quoted_message_fetch_uses_configured_api_domain(monkeypatch):
+    calls = []
+    response = _response({"code": 0, "data": {"items": []}})
+
+    def fake_get(**kwargs):
+        calls.append(kwargs["url"])
+        return response
+
+    monkeypatch.setattr("channel.feishu.feishu_message.requests.get", fake_get)
+
+    FeishuMessage(
+        _event(),
+        access_token="tenant-token",
+        api_base="https://open.larksuite.com",
+    )
+
+    assert calls == ["https://open.larksuite.com/open-apis/im/v1/messages/om_parent"]
